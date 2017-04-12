@@ -15,10 +15,13 @@ OptionParser.new do |opts|
   end
 end.parse!
 
+filepath = ARGV[0]
+Dir.chdir(File.dirname(filepath))
+file = File.basename(filepath)
 title = $options[:title]
 Dir.mkdir(title)  unless File.exists?(title)
 
-doc = Docx::Document.open(ARGV[0])
+doc = Docx::Document.open(file)
 table = doc.tables[0]
 table.rows.each do |row|
   page = row.cells[0].nil? ? "" : row.cells[0].to_s
