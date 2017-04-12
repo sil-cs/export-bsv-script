@@ -11,6 +11,7 @@ ruby export-bsv-script.rb [-t "Title"] filename.docx
 ## Installation
 
 ### Windows Install Requirements
+* Install git via [msysgit](http://msysgit.github.io/)
 * Install the latest [Ruby](http://rubyinstaller.org/downloads/)
   * Check "Add Ruby executable to your PATH"
   * Check "Associate .rb and .rbw files with this Ruby installation"
