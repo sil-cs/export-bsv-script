@@ -44,3 +44,7 @@ source cache successfully updated
 * `git clone https://github.com/chrisvire/export-bsv-script`
 * `cd export-bsv-script`
 * `bundle install`
+
+### Exe creation
+* `gem install ocra`
+* `ocra export-bsv-script.rb`
