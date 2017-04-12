@@ -7,13 +7,25 @@ class String
   end
 end
 
+ARGV << "-h" if ARGV.empty?
+
 $options = { :title => 'Title' }
 OptionParser.new do |opts|
-  opts.banner = 'Usage: export_bsv_script.rb [options]'
+  opts.banner = 'Usage: export_bsv_script.rb [options] FILENAME'
   opts.on('-t', '--title TITLE', 'Title of script') do |title|
     $options[:title] = title
   end
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
 end.parse!
+
+if ARGV.empty?
+  puts opts.help
+  puts "At least one parameter required!"
+  exit
+end
 
 filepath = ARGV[0]
 Dir.chdir(File.dirname(filepath))
