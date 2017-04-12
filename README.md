@@ -3,14 +3,20 @@
 Export Bible Story Video Script (in docx format) to files needed by the Story Producer App.
 Files will be created in a directory based on the title (command-line argument).
 
+Add a Row to the table with "T" as the # and the Title in the "Narration Text" column instead of specifying the title on the command-line.
+
+## Windows Executable
+Download a release and drag-drop a file on the executable.  It will create a directory (name is the title) with the files in it.
+
+## Command-Line
 Usage:
 ```
 ruby export-bsv-script.rb [-t "Title"] filename.docx
 ```
 
-## Installation
+### Installation
 
-### Windows Install Requirements
+#### Windows Install Requirements
 * Install git via [msysgit](http://msysgit.github.io/)
 * Install the latest [Ruby](http://rubyinstaller.org/downloads/)
   * Check "Add Ruby executable to your PATH"
