@@ -44,7 +44,7 @@ table.rows.each do |row|
     ref = row.cells[3].nil? ? "" : row.cells[3].to_s
 
     File.open(File.join(title, page + ".txt"), "w+") do |f|
-      f.write("#{title}~#{ref}~#{text}")
+      f.write("#{title.strip}~#{ref.strip}~#{text.strip}")
     end
   end
 end
