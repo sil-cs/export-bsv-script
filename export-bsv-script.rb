@@ -36,8 +36,11 @@ file = File.basename(filepath)
 title = $options[:title]
 passage = $options[:passage]
 
+# get the docx which holds a table with all the info for the story
 doc = Docx::Document.open(file)
 table = doc.tables[0]
+
+# loop through table
 table.rows.each do |row|
   page = row.cells[0].nil? ? "" : row.cells[0].to_s
   if page == "T"
