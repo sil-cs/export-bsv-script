@@ -8,6 +8,23 @@ class String
   end
 end
 
+def format_time(time)
+  time = time.split(":")
+  formatted = ""
+  for i in 0..(time.length - 1)
+    t = time[i].gsub(/[[:space:]]/, '')
+    if (t != "0" && t != "00" && t != "")
+      if (formatted == "")
+        formatted = formatted + t
+      else
+        formatted = formatted + ":" + t
+      end
+    end
+  end
+  if (formatted == "") then formatted = "0" end
+  return formatted
+end
+
 if ARGV.empty?
   puts "At least one parameter required!"
   exit
@@ -49,7 +66,7 @@ end
 # XML file builder
 xml = Builder::XmlMarkup.new( :indent => 2 )
 # declare the headers and the main attributes for the story project
-xml.instruct! :xml, :version => "1.0", :encoding => "UTF-8" 
+xml.instruct! :xml, :version => "1.0", :encoding => "utf-8" 
 xml.MSPhotoStoryProject(
   :xmlns => "MSVideoStory",
   :schemaVersion => "2.0",
@@ -64,14 +81,34 @@ xml.MSPhotoStoryProject(
   prev_end_time = "0"
   tables.each do |table|
 
-    table.rows.each do |row|
+    # use for loop here so we can use the index to get previous and future rows
+    #rows = table.rows
+    table.rows.each_with_index do |row, i|
       page = row.cells[0].nil? ? "" : row.cells[0].to_s
+      # skip this scene if there's no narration text
       narration_text = row.cells[2].nil? ? "" : row.cells[2].to_s
+      next if narration_text == ""
+      # get the timestamps and adjust if blank
       start_time = row.cells[4].nil? ? "" : row.cells[4].to_s
       end_time = row.cells[5].nil? ? "" : row.cells[5].to_s
-
-      # skip this iteration if there's no narration text
-      next if narration_text == ""
+      if (start_time == "")
+        if (i > 0)
+          start_time = table.rows[i - 1].cells[5].to_s
+        else 
+          start_time = "0"
+        end
+      end
+      if (end_time == "")
+        if (i < table.rows.length && table.rows[i + 1].cells[4].to_s != "")
+          end_time = table.rows[i + 1].cells[4].to_s
+        else  
+          puts "The last end time box cannot be blank"
+          exit
+        end
+      end
+      # format the start and end times
+      start_time = format_time(start_time)
+      end_time   = format_time(end_time)
 
       # if page is a number, we have a new scene
       if page.is_integer?
@@ -85,8 +122,6 @@ xml.MSPhotoStoryProject(
         # check for images that matched the page/scene number
         # TODO: what do we do if there were no images or FASTIMAGE fails?
         x.VisualUnit do |vu|
-          # add the timestamp
-          if (start_time == "") then start_time = prev_end_time end
           vu.Timestamp :useMillis => false, :start => start_time.gsub(/[[:space:]]/, ''), :end => end_time.gsub(/[[:space:]]/, '')
           # check for an image
           if (images.length > 0)
@@ -106,8 +141,6 @@ xml.MSPhotoStoryProject(
             vu.Narration :path => waves[0]
           end
         end
-
-        prev_end_time = end_time
 
       end
     end # end of looping through table

@@ -10,8 +10,9 @@
 /test/version_tmp/
 /tmp/
 
-# ignore all docx templates
+# ignore all docx and templates that are generated
 *.docx
+*/
 
 # Used by dotenv library to load environment variables.
 # .env
