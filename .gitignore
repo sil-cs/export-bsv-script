@@ -14,6 +14,9 @@
 *.docx
 */
 
+# ignore executables
+*.exe
+
 # Used by dotenv library to load environment variables.
 # .env
 
